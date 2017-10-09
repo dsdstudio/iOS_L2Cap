@@ -19,8 +19,6 @@
 @property (strong, nonatomic) CBPeripheral *peripheral;
 @property (strong, nonatomic) BTPeripheral* p;
 
-//@property BOOL isRunning;
-//@property(nonatomic, assign) id <BleManagerDelegate> delegate;
 
 +(id)sharedInstance;
 - (id)init __attribute__((unavailable("init is not available")));
@@ -76,7 +74,7 @@
 // peripheral:didDiscoverServices:
 // Invoked when you discover the peripheral’s available services.
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error;
--(void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error;
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error;
 
 
 @end

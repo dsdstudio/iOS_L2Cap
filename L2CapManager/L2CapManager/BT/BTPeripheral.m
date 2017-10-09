@@ -85,7 +85,6 @@
     _l2cap = channel;
     _stream = _l2cap.outputStream;
     _stream.delegate = self;
-    //[l2cap peer];
 }
 
 
@@ -147,7 +146,7 @@
     NSLog(@"%@", NSStringFromSelector(_cmd));
     if(error){
         NSLog(@"[error] %@", [error localizedDescription]);
-    }else{
+    }//else{
         if([characteristic.UUID.UUIDString isEqualToString:kCharacteristicUUID]){
             uint value;
             NSData* data = characteristic.value;
@@ -155,16 +154,16 @@
             
             NSLog(@"data: %d", value);
         }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
-//            uint value;
+//            uint16_t value;
 //            NSData* data = characteristic.value;
-//            [data getBytes:&value length:sizeof(uint)];
+//            [data getBytes:&value length:sizeof(uint16_t)];
 //            psm = value;
 //
 //            NSLog(@"PSM: %d", value);
 //            [peripheral openL2CAPChannel:psm];
         }
         
-    }
+    //}
 }
 
 // peripheral:didUpdateValueForDescriptor:error:
@@ -214,19 +213,14 @@
                 //[peripheral readValueForCharacteristic:characteristic];
             }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
                 NSLog(@"Notification began on %@", characteristic);
-                uint value;
+                uint16_t value;
                 NSData* data = characteristic.value;
-                [data getBytes:&value length:sizeof(uint)];
+                [data getBytes:&value length:sizeof(uint16_t)];
                 NSLog(@"data: %d", value);
                 [peripheral openL2CAPChannel:192];
                 //[peripheral readValueForCharacteristic:characteristic];
             }
         }
-            //else { // Notification has stopped
-        // so disconnect from the peripheral
-        //    NSLog(@"Notification stopped on %@.  Disconnecting", characteristic);
-        //    [self.centralManager cancelPeripheralConnection:self.peripheral];
-        //}
     }
     
 }

@@ -185,10 +185,13 @@
             NSData *dataBatteryLevel = [NSData dataWithBytes:&battery_level length:sizeof(battery_level)];
             [peripheral updateValue:dataBatteryLevel forCharacteristic:self.characteristic onSubscribedCentrals:nil];
         }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
-            uint value = psm;
+            uint16_t value = psm;
+            //uint8_t hoge;
             NSData* psmValue = [NSData dataWithBytes:&value length:sizeof(value)];
+            //NSLog(@"%@", psmValue);
             [peripheral updateValue:psmValue forCharacteristic:self.L2CapSMCharacteristic
                onSubscribedCentrals:nil];
+            
         }
     }
 }

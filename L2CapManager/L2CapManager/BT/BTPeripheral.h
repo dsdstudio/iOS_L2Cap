@@ -26,7 +26,6 @@
 
 - (id)init __attribute__((unavailable("init is not available")));
 - (id)initWithServicePeripheral:(CBPeripheral *)peripheral service:(CBService *)service;
-//-(void)start:(CBPeripheral *)peripheral service:(CBService *)service;
 
 // ------------------------------
 // CBPeripheralDelegate

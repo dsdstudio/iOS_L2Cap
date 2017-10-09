@@ -47,13 +47,8 @@ static BTManager* me;
     if(self){
         self = [super init];
     }
-    kServiceUUID = @"312700E2-E798-4D5C-8DCF-49908332DF9F";
     
-    //    NSDictionary *options = @{
-    //                              CBCentralManagerOptionRestoreIdentifierKey:@"EA.ble.identifier",
-    //                              CBCentralManagerOptionShowPowerAlertKey:@YES
-    //                              };
-    //dispatch_queue_t que = dispatch_queue_create("com.chocbanana.ios.eeg-acceleration-logger", DISPATCH_QUEUE_SERIAL);
+    kServiceUUID = @"312700E2-E798-4D5C-8DCF-49908332DF9F";
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     
     return self;
@@ -133,7 +128,6 @@ static BTManager* me;
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
     //NSLog(@"%@", NSStringFromSelector(_cmd));
-    //[self.centralManager stopScan];
     //NSLog(@"[RSSI] %@", RSSI);
     
     

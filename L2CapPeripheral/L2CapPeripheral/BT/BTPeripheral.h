@@ -11,8 +11,6 @@
 
 
 @protocol BTPeripheralDelegate<NSObject>
-//@required
-//- (void)foo;
 @optional
 
 - (void)logDelegate:(NSString *)message;
