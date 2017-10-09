@@ -1,0 +1,355 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BD10DB481F8B6E3A00A6C2CA /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD10DB471F8B6E3A00A6C2CA /* CoreBluetooth.framework */; };
+		BDE43B521F8A7447006E971E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE43B511F8A7447006E971E /* AppDelegate.m */; };
+		BDE43B551F8A7447006E971E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE43B541F8A7447006E971E /* ViewController.m */; };
+		BDE43B581F8A7447006E971E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDE43B561F8A7447006E971E /* Main.storyboard */; };
+		BDE43B5A1F8A7447006E971E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDE43B591F8A7447006E971E /* Assets.xcassets */; };
+		BDE43B5D1F8A7447006E971E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDE43B5B1F8A7447006E971E /* LaunchScreen.storyboard */; };
+		BDE43B601F8A7447006E971E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE43B5F1F8A7447006E971E /* main.m */; };
+		BDE43B691F8A746E006E971E /* BTPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE43B681F8A746E006E971E /* BTPeripheral.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BD10DB471F8B6E3A00A6C2CA /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		BDE43B4D1F8A7447006E971E /* L2CapPeripheral.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = L2CapPeripheral.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDE43B501F8A7447006E971E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BDE43B511F8A7447006E971E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BDE43B531F8A7447006E971E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		BDE43B541F8A7447006E971E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BDE43B571F8A7447006E971E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BDE43B591F8A7447006E971E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BDE43B5C1F8A7447006E971E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BDE43B5E1F8A7447006E971E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BDE43B5F1F8A7447006E971E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BDE43B671F8A746E006E971E /* BTPeripheral.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BTPeripheral.h; sourceTree = "<group>"; };
+		BDE43B681F8A746E006E971E /* BTPeripheral.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BTPeripheral.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BDE43B4A1F8A7447006E971E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD10DB481F8B6E3A00A6C2CA /* CoreBluetooth.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BD10DB461F8B6E3A00A6C2CA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BD10DB471F8B6E3A00A6C2CA /* CoreBluetooth.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BDE43B441F8A7447006E971E = {
+			isa = PBXGroup;
+			children = (
+				BDE43B4F1F8A7447006E971E /* L2CapPeripheral */,
+				BDE43B4E1F8A7447006E971E /* Products */,
+				BD10DB461F8B6E3A00A6C2CA /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		BDE43B4E1F8A7447006E971E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BDE43B4D1F8A7447006E971E /* L2CapPeripheral.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BDE43B4F1F8A7447006E971E /* L2CapPeripheral */ = {
+			isa = PBXGroup;
+			children = (
+				BDE43B661F8A7452006E971E /* BT */,
+				BDE43B501F8A7447006E971E /* AppDelegate.h */,
+				BDE43B511F8A7447006E971E /* AppDelegate.m */,
+				BDE43B531F8A7447006E971E /* ViewController.h */,
+				BDE43B541F8A7447006E971E /* ViewController.m */,
+				BDE43B561F8A7447006E971E /* Main.storyboard */,
+				BDE43B591F8A7447006E971E /* Assets.xcassets */,
+				BDE43B5B1F8A7447006E971E /* LaunchScreen.storyboard */,
+				BDE43B5E1F8A7447006E971E /* Info.plist */,
+				BDE43B5F1F8A7447006E971E /* main.m */,
+			);
+			path = L2CapPeripheral;
+			sourceTree = "<group>";
+		};
+		BDE43B661F8A7452006E971E /* BT */ = {
+			isa = PBXGroup;
+			children = (
+				BDE43B671F8A746E006E971E /* BTPeripheral.h */,
+				BDE43B681F8A746E006E971E /* BTPeripheral.m */,
+			);
+			path = BT;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BDE43B4C1F8A7447006E971E /* L2CapPeripheral */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BDE43B631F8A7447006E971E /* Build configuration list for PBXNativeTarget "L2CapPeripheral" */;
+			buildPhases = (
+				BDE43B491F8A7447006E971E /* Sources */,
+				BDE43B4A1F8A7447006E971E /* Frameworks */,
+				BDE43B4B1F8A7447006E971E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = L2CapPeripheral;
+			productName = L2CapPeripheral;
+			productReference = BDE43B4D1F8A7447006E971E /* L2CapPeripheral.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BDE43B451F8A7447006E971E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = chocbanana;
+				TargetAttributes = {
+					BDE43B4C1F8A7447006E971E = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = BDE43B481F8A7447006E971E /* Build configuration list for PBXProject "L2CapPeripheral" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BDE43B441F8A7447006E971E;
+			productRefGroup = BDE43B4E1F8A7447006E971E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BDE43B4C1F8A7447006E971E /* L2CapPeripheral */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BDE43B4B1F8A7447006E971E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BDE43B5D1F8A7447006E971E /* LaunchScreen.storyboard in Resources */,
+				BDE43B5A1F8A7447006E971E /* Assets.xcassets in Resources */,
+				BDE43B581F8A7447006E971E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BDE43B491F8A7447006E971E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BDE43B551F8A7447006E971E /* ViewController.m in Sources */,
+				BDE43B601F8A7447006E971E /* main.m in Sources */,
+				BDE43B521F8A7447006E971E /* AppDelegate.m in Sources */,
+				BDE43B691F8A746E006E971E /* BTPeripheral.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BDE43B561F8A7447006E971E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BDE43B571F8A7447006E971E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		BDE43B5B1F8A7447006E971E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BDE43B5C1F8A7447006E971E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BDE43B611F8A7447006E971E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BDE43B621F8A7447006E971E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BDE43B641F8A7447006E971E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4DP29PVTGC;
+				INFOPLIST_FILE = L2CapPeripheral/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.chocbanana.ios.L2CapPeripheral;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BDE43B651F8A7447006E971E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4DP29PVTGC;
+				INFOPLIST_FILE = L2CapPeripheral/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.chocbanana.ios.L2CapPeripheral;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BDE43B481F8A7447006E971E /* Build configuration list for PBXProject "L2CapPeripheral" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BDE43B611F8A7447006E971E /* Debug */,
+				BDE43B621F8A7447006E971E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BDE43B631F8A7447006E971E /* Build configuration list for PBXNativeTarget "L2CapPeripheral" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BDE43B641F8A7447006E971E /* Debug */,
+				BDE43B651F8A7447006E971E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BDE43B451F8A7447006E971E /* Project object */;
+}
