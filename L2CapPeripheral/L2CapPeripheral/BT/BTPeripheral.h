@@ -32,7 +32,8 @@
 
 @property (nonatomic, strong) CBMutableService *service;
 @property (nonatomic, strong) CBL2CAPChannel *l2capChannel;
-@property (nonatomic, strong) NSStream* stream;
+//@property (nonatomic, strong) NSInputStream* inputStream;
+@property (nonatomic, strong) NSOutputStream* outputStream;
 
 @property(nonatomic, assign) id <BTPeripheralDelegate> delegate;
 

@@ -20,8 +20,9 @@
 }
 
 @property(nonatomic, strong)CBPeripheral* peripheral;
-@property(nonatomic, strong) CBService* service;
-@property(nonatomic, strong)NSStream* stream;
+@property(nonatomic, strong)CBService* service;
+@property(nonatomic, strong)NSInputStream* inputStream;
+//@property(nonatomic, strong)NSOutputStream* outputStream;
 @property(nonatomic, strong)CBL2CAPChannel* l2cap;
 
 - (id)init __attribute__((unavailable("init is not available")));

@@ -42,6 +42,19 @@
     return self;
 }
 
+-(void)receiveStreamData
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    
+    NSMutableData* data = [NSMutableData data];
+    uint8_t buf[1024];
+    [_inputStream read:buf maxLength:1024];
+    [data appendBytes:buf length:sizeof(buf)];
+    
+    NSString* str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"receiveStreamData: %@", str);
+}
+
 
 // ------------------------------
 // NSStreamDelegate
@@ -54,10 +67,12 @@
     
     switch (eventCode) {
         case NSStreamEventOpenCompleted:
+            
             break;
         case NSStreamEventHasSpaceAvailable:
             break;
         case NSStreamEventHasBytesAvailable:
+            [self receiveStreamData];
             break;
         case NSStreamEventErrorOccurred:
             break;
@@ -83,8 +98,19 @@
         NSLog(@"%@", error);
     }
     _l2cap = channel;
-    _stream = _l2cap.outputStream;
-    _stream.delegate = self;
+    //_outputStream = _l2cap.outputStream;
+    _inputStream = _l2cap.inputStream;
+    //_outputStream.delegate = self;
+    _inputStream.delegate = self;
+
+    //[_outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    //                        forMode:NSDefaultRunLoopMode];
+    //[_outputStream open];
+    
+    [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+                       forMode:NSDefaultRunLoopMode];
+    [_inputStream open];
+    
 }
 
 
@@ -154,13 +180,14 @@
             
             NSLog(@"data: %d", value);
         }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
-//            uint16_t value;
-//            NSData* data = characteristic.value;
-//            [data getBytes:&value length:sizeof(uint16_t)];
-//            psm = value;
-//
-//            NSLog(@"PSM: %d", value);
-//            [peripheral openL2CAPChannel:psm];
+            uint16_t value;
+            NSData* data = characteristic.value;
+            [data getBytes:&value length:sizeof(uint16_t)];
+            psm = value;
+
+            NSLog(@"PSM: %d", value);
+            [peripheral openL2CAPChannel:psm];
+            [peripheral setNotifyValue:NO forCharacteristic:characteristic];
         }
         
     //}
@@ -201,24 +228,12 @@
     if(error){
         NSLog(@"[error] %@", [error localizedDescription]);
     }else{
-        // Exits if it's not the transfer characteristic
-        //if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:kCharacteristicUUID]]) {
-        //    return;
-        //}
-        
         // Notification has started
         if (characteristic.isNotifying) {
             if([characteristic.UUID.UUIDString isEqualToString:kCharacteristicUUID]){
-                
-                //[peripheral readValueForCharacteristic:characteristic];
+                [peripheral readValueForCharacteristic:characteristic];
             }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
-                NSLog(@"Notification began on %@", characteristic);
-                uint16_t value;
-                NSData* data = characteristic.value;
-                [data getBytes:&value length:sizeof(uint16_t)];
-                NSLog(@"data: %d", value);
-                [peripheral openL2CAPChannel:192];
-                //[peripheral readValueForCharacteristic:characteristic];
+                [peripheral readValueForCharacteristic:characteristic];
             }
         }
     }

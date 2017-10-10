@@ -14,8 +14,15 @@
 -(id)init{
     // Do any additional setup after loading the view, typically from a nib.
     if(self = [super init]){
+        // デフォルトの通知センターを取得する
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc addObserver:self selector:@selector(didEnterBackground:) name:@"didEnterBackground" object:nil];
+        
+        //テキトーなサービスキャラクタリスティック
         kServiceUUID = @"312700E2-E798-4D5C-8DCF-49908332DF9F";
         kCharacteristicUUID = @"FFA28CDE-6525-4489-801C-1C060CAC9767";
+        
+        //L2Cap用のCharacteristic
         CBUUIDL2CAppSMCharacteristicString = @"ABDD3056-28FA-441D-A470-55A75A52553A";
         
         self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
@@ -60,9 +67,47 @@
 
 -(void)stop
 {
+    [_outputStream close];
+    //[_inputStream close];
+
     [self.peripheralManager unpublishL2CAPChannel:psm];
-    //self.peripheralManager.delegate = nil;
-    //self.peripheralManager = nil;
+}
+
+-(void)sendStreamData
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    NSString* value = @"Hello L2Cap Stream data...";
+    NSData* data = [value dataUsingEncoding:NSUTF8StringEncoding];
+    [_outputStream write:[data bytes] maxLength:[data length]];
+}
+
+
+// ------------------------------
+// NSStreamDelegate
+// ------------------------------
+
+-(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    NSLog(@"%@", aStream);
+    
+    switch (eventCode) {
+        case NSStreamEventOpenCompleted:
+            break;
+        case NSStreamEventHasSpaceAvailable:
+            [self sendStreamData];
+            break;
+        case NSStreamEventHasBytesAvailable:
+            break;
+        case NSStreamEventErrorOccurred:
+            break;
+        case NSStreamEventEndEncountered:
+            break;
+        case NSStreamEventNone:
+            break;
+        default:
+            break;
+    }
 }
 
 // ------------------------------
@@ -75,8 +120,21 @@
     NSLog(@"Open L2Cap channel...");
     [self.delegate logDelegate:NSStringFromSelector(_cmd)];
     _l2capChannel = channel;
-    //_l2capChannel.inputStream;
+
+    _outputStream = _l2capChannel.outputStream;
+    //_inputStream = _l2capChannel.inputStream;
     
+    _outputStream.delegate = self;
+    //_inputStream.delegate = self;
+    
+    [_outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+                            forMode:NSDefaultRunLoopMode];
+    [_outputStream open];
+
+    //[_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    //                         forMode:NSDefaultRunLoopMode];
+    //[_inputStream open];
+
 }
 
 -(void)peripheralManager:(CBPeripheralManager *)peripheral didPublishL2CAPChannel:(CBL2CAPPSM)PSM error:(NSError *)error
@@ -179,21 +237,6 @@
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
     [self.delegate logDelegate:NSStringFromSelector(_cmd)];
-    if(characteristic.isNotifying ){
-        if([characteristic.UUID.UUIDString isEqualToString:kCharacteristicUUID]){
-            uint battery_level = 39;
-            NSData *dataBatteryLevel = [NSData dataWithBytes:&battery_level length:sizeof(battery_level)];
-            [peripheral updateValue:dataBatteryLevel forCharacteristic:self.characteristic onSubscribedCentrals:nil];
-        }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
-            uint16_t value = psm;
-            //uint8_t hoge;
-            NSData* psmValue = [NSData dataWithBytes:&value length:sizeof(value)];
-            //NSLog(@"%@", psmValue);
-            [peripheral updateValue:psmValue forCharacteristic:self.L2CapSMCharacteristic
-               onSubscribedCentrals:nil];
-            
-        }
-    }
 }
 
 // peripheralManager:central:didUnsubscribeFromCharacteristic:
@@ -220,6 +263,20 @@
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
     [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    
+    CBCharacteristic* characteristic = request.characteristic;
+    
+    if([characteristic.UUID.UUIDString isEqualToString:kCharacteristicUUID]){
+        uint battery_level = 39;
+        NSData *dataBatteryLevel = [NSData dataWithBytes:&battery_level length:sizeof(battery_level)];
+        request.value = dataBatteryLevel;
+        [self.peripheralManager respondToRequest:request withResult:CBATTErrorSuccess];
+    }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
+        uint16_t value = psm;
+        NSData* psmValue = [NSData dataWithBytes:&value length:sizeof(value)];
+        request.value = psmValue;
+        [self.peripheralManager respondToRequest:request withResult:CBATTErrorSuccess];
+    }
 }
 
 // peripheralManager:didReceiveWriteRequests:
@@ -235,6 +292,11 @@
 - (void)peripheral:(CBPeripheral *)peripheral didModifyServices:(NSArray *)invalidatedServices
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+-(void)didEnterBackground:(NSNotification *)notification
+{
+    [self stop];
 }
 
 @end
