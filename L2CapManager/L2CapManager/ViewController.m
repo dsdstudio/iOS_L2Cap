@@ -39,10 +39,7 @@
 -(void)logDelegate:(NSString *)message
 {
     [log appendFormat:@"%@%@", message, @"\r\n"];
-    
-    //dispatch_async(dispatch_get_main_queue(), ^{
-        [self.txt_view setText:log];
-    //});
+    [self.txt_view setText:log];
 }
 
 @end

@@ -78,14 +78,18 @@
 {
     //NSString* cmd = NSStringFromSelector(_cmd);
     //NSLog(@"%@", cmd);
-    //[self.delegate logDelegate:cmd];
     
     NSString* value = @"Hello L2Cap Stream data...";
     NSLog(@"%@\r\n", value);
-    //[self.delegate logDelegate:value];
     
     NSData* data = [value dataUsingEncoding:NSUTF8StringEncoding];
-    [outputStream write:[data bytes] maxLength:[data length]];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [outputStream write:[data bytes] maxLength:[data length]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+           [self.delegate logDelegate:value];
+        });
+    });
 }
 
 
@@ -97,8 +101,6 @@
 {
     //NSString* cmd = NSStringFromSelector(_cmd);
     //NSLog(@"%@", cmd);
-    //[self.delegate logDelegate:cmd];
-    
     //NSLog(@"%@", aStream);
     
     switch (eventCode) {

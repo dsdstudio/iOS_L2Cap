@@ -50,16 +50,21 @@
 
 -(void)receiveStreamData
 {
-    //[self log:NSStringFromSelector(_cmd)];
-    
     NSMutableData* data = [NSMutableData data];
-    uint8_t buf[1024];
-    [inputStream read:buf maxLength:1024];
-    [data appendBytes:buf length:sizeof(buf)];
+    static uint8_t buf[1024];
     
-    NSString* str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"receiveStreamData: %@", str);
-    //[self.delegate logDelegate:str];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //Background Thread.
+        [inputStream read:buf maxLength:1024];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //Main Thread.
+            [data appendBytes:buf length:sizeof(buf)];
+            
+            NSString* str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            [self log:str];
+        });
+    });
 }
 
 
