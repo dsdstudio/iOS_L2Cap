@@ -9,9 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "BTManager.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<BTPeripheralDelegate>
+{
+    NSMutableString* log;
+}
 
 @property(nonatomic, strong)BTManager *m;
+
+@property (weak, nonatomic) IBOutlet UITextView *txt_view;
 
 @end
 

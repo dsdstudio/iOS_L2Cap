@@ -23,8 +23,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2i8-ik-hed">
-                                <rect key="frame" x="16" y="49" width="343" height="200"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2i8-ik-hed">
+                                <rect key="frame" x="16" y="57" width="343" height="526"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -34,8 +34,8 @@
                         <constraints>
                             <constraint firstItem="2i8-ik-hed" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="IP3-6k-bBE"/>
                             <constraint firstItem="xcI-cb-4MH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="RY1-66-Ee0"/>
-                            <constraint firstItem="2i8-ik-hed" firstAttribute="top" secondItem="xcI-cb-4MH" secondAttribute="bottom" constant="8" id="a1J-vm-Ish"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="2i8-ik-hed" secondAttribute="bottom" constant="354" id="aVV-rf-u5f"/>
+                            <constraint firstItem="2i8-ik-hed" firstAttribute="top" secondItem="xcI-cb-4MH" secondAttribute="bottom" constant="16" id="a1J-vm-Ish"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="2i8-ik-hed" secondAttribute="bottom" constant="20" id="aVV-rf-u5f"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xcI-cb-4MH" secondAttribute="trailing" constant="16" id="jXc-v4-GhE"/>
                             <constraint firstItem="xcI-cb-4MH" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="lUL-bX-Xk2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2i8-ik-hed" secondAttribute="trailing" constant="16" id="qGz-dU-7rE"/>

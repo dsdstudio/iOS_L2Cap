@@ -44,12 +44,10 @@ static BTManager* me;
 
 -(id)initWithSelf
 {
-    if(self){
-        self = [super init];
+    if(self = [super init]){
+        kServiceUUID = @"312700E2-E798-4D5C-8DCF-49908332DF9F";
+        self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     }
-    
-    kServiceUUID = @"312700E2-E798-4D5C-8DCF-49908332DF9F";
-    self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     
     return self;
     
@@ -57,7 +55,7 @@ static BTManager* me;
 
 -(void)start
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    //NSLog(@"%@", NSStringFromSelector(_cmd));
     // 単一デバイスの発見イベントを重複して発行させるか？
     CBUUID* uuid = [CBUUID UUIDWithString:kServiceUUID];
     [self.centralManager scanForPeripheralsWithServices: @[uuid]
@@ -103,14 +101,13 @@ static BTManager* me;
     //        NSLog(@"[error] %@", [error localizedDescription]);
     //        NSLog(@"[error] %@", [error localizedFailureReason]);
     //        NSLog(@"[error] %@", [error localizedRecoverySuggestion]);
-    //}else{
+    //}
     //NSLog(@"disconnect");
     
     if([self.peripheral isEqual:peripheral]){
         self.peripheral.delegate = nil;
         self.peripheral = nil;
     }
-    //}
 }
 
 // centralManager:didFailToConnectPeripheral:error:
@@ -122,7 +119,7 @@ static BTManager* me;
 
 // Discovering and Retrieving Peripherals
 
-// デバイス発見時
+// device find.
 // centralManager:didDiscoverPeripheral:advertisementData:RSSI:
 // Invoked when the central manager discovers a peripheral while scanning.
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
@@ -133,7 +130,8 @@ static BTManager* me;
     
     self.peripheral = peripheral;
     //NSLog(@"Connecting to pripheral %@", peripheral);
-    // 発見されたデバイスに接続
+    
+    // connect peripheral device.
     [self.centralManager connectPeripheral:peripheral options:nil];
     [self.centralManager stopScan];
 }
@@ -208,13 +206,16 @@ static BTManager* me;
     //NSLog(@"%@", NSStringFromSelector(_cmd));
     if(error){
         NSLog(@"[error] %@", [error localizedDescription]);
-    }else{
-        
-        for(CBService *service in peripheral.services) {
-            if([service.UUID.UUIDString isEqualToString:kServiceUUID]){
-                //NSLog(@"hoge");
-                _p = [[BTPeripheral alloc] initWithServicePeripheral:peripheral service:service];
-            }
+        return;
+    }
+    
+    for(CBService *service in peripheral.services) {
+        if([service.UUID.UUIDString isEqualToString:kServiceUUID]){
+            //NSLog(@"hoge");
+            _p = [[BTPeripheral alloc] initWithServicePeripheral:peripheral service:service];
+            
+            NSNotification *n = [NSNotification notificationWithName:@"connectedPeripheral" object:self];
+            [[NSNotificationCenter defaultCenter] postNotification:n];
         }
     }
 }

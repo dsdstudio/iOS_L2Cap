@@ -25,34 +25,41 @@
     if(self = [super init]){
         kCharacteristicUUID = @"FFA28CDE-6525-4489-801C-1C060CAC9767";
         CBUUIDL2CAppSMCharacteristicString = @"ABDD3056-28FA-441D-A470-55A75A52553A";
-
-        NSLog(@"peripheral start...");
+        
+        //NSLog(@"peripheral init...");
         
         self.peripheral = peripheral;
         self.peripheral.delegate = self;
-        self.service = service;
-
+        
         NSArray* characteristics = @[
                                      [CBUUID UUIDWithString:kCharacteristicUUID],
                                      [CBUUID UUIDWithString:CBUUIDL2CAppSMCharacteristicString],
                                      ];
         [self.peripheral discoverCharacteristics:characteristics forService:service];
-
+        
     }
     return self;
 }
 
+-(void)log:(NSString *)message
+{
+    NSLog(@"%@", message);
+    [self.delegate logDelegate:message];
+}
+
+
 -(void)receiveStreamData
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    //[self log:NSStringFromSelector(_cmd)];
     
     NSMutableData* data = [NSMutableData data];
     uint8_t buf[1024];
-    [_inputStream read:buf maxLength:1024];
+    [inputStream read:buf maxLength:1024];
     [data appendBytes:buf length:sizeof(buf)];
     
     NSString* str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"receiveStreamData: %@", str);
+    //[self.delegate logDelegate:str];
 }
 
 
@@ -62,8 +69,8 @@
 
 -(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    NSLog(@"%@", aStream);
+    //NSLog(@"%@", NSStringFromSelector(_cmd));
+    //NSLog(@"%@", aStream);
     
     switch (eventCode) {
         case NSStreamEventOpenCompleted:
@@ -92,24 +99,26 @@
 
 -(void)peripheral:(CBPeripheral *)peripheral didOpenL2CAPChannel:(CBL2CAPChannel *)channel error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
     
     if(error){
         NSLog(@"%@", error);
     }
-    _l2cap = channel;
-    //_outputStream = _l2cap.outputStream;
-    _inputStream = _l2cap.inputStream;
-    //_outputStream.delegate = self;
-    _inputStream.delegate = self;
-
-    //[_outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
-    //                        forMode:NSDefaultRunLoopMode];
-    //[_outputStream open];
     
-    [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
-                       forMode:NSDefaultRunLoopMode];
-    [_inputStream open];
+    _l2cap = channel;
+    
+    //outputStream = _l2cap.outputStream;
+    inputStream = _l2cap.inputStream;
+    //outputStream.delegate = self;
+    inputStream.delegate = self;
+    
+    //[outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    //                        forMode:NSDefaultRunLoopMode];
+    //[outputStream open];
+
+    [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+                           forMode:NSDefaultRunLoopMode];
+    [inputStream open];
     
 }
 
@@ -121,7 +130,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));;;
+    [self log:NSStringFromSelector(_cmd)];
 }
 
 //Discovering Characteristics and Characteristic Descriptors
@@ -130,14 +139,13 @@
 // Invoked when you discover the characteristics of a specified service.
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
     
     if(error){
         NSLog(@"[error] %@", [error localizedDescription]);
     }else{
         for (CBCharacteristic *characteristic in service.characteristics) {
             if ([characteristic.UUID.UUIDString isEqualToString:kCharacteristicUUID]) {
-                NSLog(@"characteristics is found!");
                 [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
                 [peripheral setNotifyValue:YES forCharacteristic:characteristic];
@@ -149,7 +157,7 @@
 // Invoked when you discover the included services of a specified service.
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverIncludedServicesForService:(CBService *)service error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
 }
 
 
@@ -158,7 +166,7 @@
 // Invoked when you discover the descriptors of a specified characteristic.
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
 }
 
 
@@ -169,35 +177,36 @@
 // Invoked when you retrieve a specified characteristic’s value, or when the peripheral device notifies your app that the characteristic’s value has changed.
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
+    
     if(error){
         NSLog(@"[error] %@", [error localizedDescription]);
-    }//else{
-        if([characteristic.UUID.UUIDString isEqualToString:kCharacteristicUUID]){
-            uint value;
-            NSData* data = characteristic.value;
-            [data getBytes:&value length:sizeof(uint)];
-            
-            NSLog(@"data: %d", value);
-        }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
-            uint16_t value;
-            NSData* data = characteristic.value;
-            [data getBytes:&value length:sizeof(uint16_t)];
-            psm = value;
-
-            NSLog(@"PSM: %d", value);
-            [peripheral openL2CAPChannel:psm];
-            [peripheral setNotifyValue:NO forCharacteristic:characteristic];
-        }
+        return;
+    }
+    
+    if([characteristic.UUID.UUIDString isEqualToString:kCharacteristicUUID]){
+        uint value;
+        NSData* data = characteristic.value;
+        [data getBytes:&value length:sizeof(uint)];
         
-    //}
+        [self log:[NSString stringWithFormat:@"%d", value]];
+    }else if([characteristic.UUID.UUIDString isEqualToString:CBUUIDL2CAppSMCharacteristicString]){
+        uint16_t value;
+        NSData* data = characteristic.value;
+        [data getBytes:&value length:sizeof(uint16_t)];
+        psm = value;
+        
+        [self log:[NSString stringWithFormat:@"PSM: %d", value]];
+        [peripheral openL2CAPChannel:psm];
+        [peripheral setNotifyValue:NO forCharacteristic:characteristic];
+    }
 }
 
 // peripheral:didUpdateValueForDescriptor:error:
 // Invoked when you retrieve a specified characteristic descriptor’s value.
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
 }
 
 // Writing Characteristic and Characteristic Descriptor Values
@@ -207,7 +216,7 @@
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
     //NSLog(@"write characteristic");
-    //NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
     
 }
 
@@ -215,7 +224,7 @@
 // Invoked when you write data to a characteristic descriptor’s value.
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
 }
 
 // Managing Notifications for a Characteristic’s Value
@@ -224,7 +233,8 @@
 // Invoked when the peripheral receives a request to start or stop providing notifications for a specified characteristic’s value.
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
+    
     if(error){
         NSLog(@"[error] %@", [error localizedDescription]);
     }else{
@@ -246,7 +256,7 @@
 // Invoked when you retrieve the value of the peripheral’s current RSSI while it is connected to the central manager.
 - (void)peripheralDidUpdateRSSI:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
 }
 
 // Monitoring Changes to a Peripheral’s Name or Services
@@ -255,14 +265,15 @@
 // Invoked when a peripheral’s name changes.
 - (void)peripheralDidUpdateName:(CBPeripheral *)peripheral
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
 }
 
 // peripheral:didModifyServices:
 // Invoked when a peripheral’s services have changed.
 - (void)peripheral:(CBPeripheral *)peripheral didModifyServices:(NSArray *)invalidatedServices
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self log:NSStringFromSelector(_cmd)];
 }
 
 @end
+

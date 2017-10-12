@@ -17,11 +17,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
     logString = [NSMutableString string];
     self.p = [[BTPeripheral alloc] init];
     self.p.delegate = self;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -30,8 +35,8 @@
 
 -(void)logDelegate:(NSString *)message
 {
-    //NSLog(@"%@", message);
-    [logString stringByAppendingString:message];
-    self.txt_view.text = logString;
+    //NSLog(@"message: %@", message);
+    [logString appendFormat:@"%@%@", message, @"\r\n"];
+    [self.txt_view setText:logString];
 }
 @end

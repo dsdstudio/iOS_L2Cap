@@ -35,8 +35,9 @@
 
 - (void)setupService
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
     
     // Creates the characteristic UUID
     CBUUID *characteristicUUID = [CBUUID UUIDWithString:kCharacteristicUUID];
@@ -47,27 +48,27 @@
     // Creates the characteristic
     //self.characteristic = [[CBMutableCharacteristic alloc] initWithType:characteristicUUID properties:CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
     
-    self.characteristic = [[CBMutableCharacteristic alloc] initWithType:characteristicUUID properties:CBCharacteristicPropertyRead | CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
+    CBMutableCharacteristic* characteristic = [[CBMutableCharacteristic alloc] initWithType:characteristicUUID properties:CBCharacteristicPropertyRead | CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
     
-    self.L2CapSMCharacteristic = [[CBMutableCharacteristic alloc] initWithType:l2capCharacteisticUUID properties:CBCharacteristicPropertyRead | CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
+    CBMutableCharacteristic* L2CapSMCharacteristic = [[CBMutableCharacteristic alloc] initWithType:l2capCharacteisticUUID properties:CBCharacteristicPropertyRead | CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
 
     // Creates the service UUID
     CBUUID *serviceUUID = [CBUUID UUIDWithString:kServiceUUID];
     
     // Creates the service and adds the characteristic to it
-    self.service = [[CBMutableService alloc] initWithType:serviceUUID primary:YES];
+    CBMutableService* service = [[CBMutableService alloc] initWithType:serviceUUID primary:YES];
     
     // Sets the characteristics for this service
-    [self.service setCharacteristics:@[self.characteristic, self.L2CapSMCharacteristic]];
+    [service setCharacteristics:@[characteristic, L2CapSMCharacteristic]];
     
     // Publishes the service
-    [self.peripheralManager addService:self.service];
+    [self.peripheralManager addService:service];
     [self.peripheralManager publishL2CAPChannelWithEncryption:YES];
 }
 
 -(void)stop
 {
-    [_outputStream close];
+    [outputStream close];
     //[_inputStream close];
 
     [self.peripheralManager unpublishL2CAPChannel:psm];
@@ -75,10 +76,16 @@
 
 -(void)sendStreamData
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    //NSString* cmd = NSStringFromSelector(_cmd);
+    //NSLog(@"%@", cmd);
+    //[self.delegate logDelegate:cmd];
+    
     NSString* value = @"Hello L2Cap Stream data...";
+    NSLog(@"%@\r\n", value);
+    //[self.delegate logDelegate:value];
+    
     NSData* data = [value dataUsingEncoding:NSUTF8StringEncoding];
-    [_outputStream write:[data bytes] maxLength:[data length]];
+    [outputStream write:[data bytes] maxLength:[data length]];
 }
 
 
@@ -88,8 +95,11 @@
 
 -(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    NSLog(@"%@", aStream);
+    //NSString* cmd = NSStringFromSelector(_cmd);
+    //NSLog(@"%@", cmd);
+    //[self.delegate logDelegate:cmd];
+    
+    //NSLog(@"%@", aStream);
     
     switch (eventCode) {
         case NSStreamEventOpenCompleted:
@@ -116,40 +126,55 @@
 
 -(void)peripheralManager:(CBPeripheralManager *)peripheral didOpenL2CAPChannel:(CBL2CAPChannel *)channel error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    NSLog(@"Open L2Cap channel...");
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
+    
+    NSString* value = @"Open L2Cap channel...";
+    NSLog(@"%@", value);
+    [self.delegate logDelegate:value];
+    
     _l2capChannel = channel;
 
-    _outputStream = _l2capChannel.outputStream;
-    //_inputStream = _l2capChannel.inputStream;
+    outputStream = _l2capChannel.outputStream;
+    //inputStream = _l2capChannel.inputStream;
     
-    _outputStream.delegate = self;
-    //_inputStream.delegate = self;
+    outputStream.delegate = self;
+    //inputStream.delegate = self;
     
-    [_outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
                             forMode:NSDefaultRunLoopMode];
-    [_outputStream open];
+    [outputStream open];
 
-    //[_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    //[inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
     //                         forMode:NSDefaultRunLoopMode];
-    //[_inputStream open];
+    //[inputStream open];
 
 }
 
 -(void)peripheralManager:(CBPeripheralManager *)peripheral didPublishL2CAPChannel:(CBL2CAPPSM)PSM error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
+    
     psm = PSM;
-    NSLog(@"Listen L2Cap channel...");
-    NSLog(@"PSM: %d", psm);
+    
+    NSString* value = @"Listen L2Cap channel...";
+    NSLog(@"%@", value);
+    [self.delegate logDelegate:value];
+    
+    value = [NSString stringWithFormat:@"PSM: %d", psm];
+    NSLog(@"%@", value);
+    [self.delegate logDelegate:value];
+    
 }
 
 -(void)peripheralManager:(CBPeripheralManager *)peripheral didUnpublishL2CAPChannel:(CBL2CAPPSM)PSM error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
 }
 
 // Monitoring Changes to the Peripheral Manager’s State
@@ -159,31 +184,56 @@
 // Invoked when the peripheral manager's state is updated. (required)
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
 {
-    //_manager = manager;
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
+    
+    NSString* value;
     
     switch (peripheral.state) {
         case CBManagerStatePoweredOn:
-            NSLog(@"%ld, CBManagerStatePoweredOn", (long)peripheral.state);
-            // PowerOn なら，デバイスのセッティングを開始する．
-             [self setupService];
+        {
+            [self setupService];
+            value = [NSString stringWithFormat:@"%ld, CBManagerStatePoweredOn", (long)peripheral.state];
+            [self.delegate logDelegate:value];
+            NSLog(@"%@", value);
+        }
             break;
         case CBManagerStatePoweredOff:
-            NSLog(@"%ld, CBManagerStatePoweredOff", (long)peripheral.state);
+        {
             [self stop];
+            value = [NSString stringWithFormat:@"%ld, CBManagerStatePoweredOff", (long)peripheral.state];
+            [self.delegate logDelegate:value];
+            NSLog(@"%@", value);
+        }
             break;
         case CBManagerStateResetting:
-            NSLog(@"%ld, CBManagerStateResetting", (long)peripheral.state);
+        {
+            value = [NSString stringWithFormat:@"%ld, CBManagerStateResetting", (long)peripheral.state];
+            [self.delegate logDelegate:value];
+            NSLog(@"%@", value);
+        }
             break;
         case CBManagerStateUnauthorized:
-            NSLog(@"%ld, CBManagerStateUnauthorized", (long)peripheral.state);
+        {
+            value = [NSString stringWithFormat:@"%ld, CBManagerStateUnauthorized", (long)peripheral.state];
+            [self.delegate logDelegate:value];
+            NSLog(@"%@", value);
+        }
             break;
         case CBManagerStateUnsupported:
-            NSLog(@"%ld, CBManagerStateUnsupported", (long)peripheral.state);
+        {
+            value = [NSString stringWithFormat:@"%ld, CBManagerStateUnsupported", (long)peripheral.state];
+            [self.delegate logDelegate:value];
+            NSLog(@"%@", value);
+        }
             break;
         case CBManagerStateUnknown:
-            NSLog(@"%ld, CBManagerStateUnknown", (long)peripheral.state);
+        {
+            value = [NSString stringWithFormat:@"%ld, CBManagerStateUnknown", (long)peripheral.state];
+            [self.delegate logDelegate:value];
+            NSLog(@"%@", value);
+        }
             break;
         default:
             break;
@@ -194,7 +244,9 @@
 // Invoked when the peripheral manager is about to be restored by the system.
 - (void)peripheralManager:(CBPeripheralManager *)peripheral willRestoreState:(NSDictionary *)dict
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
 }
 
 // Adding Services
@@ -203,15 +255,18 @@
 // Invoked when you publish a service, and any of its associated characteristics and characteristic descriptors, to the local Generic Attribute Profile (GATT) database.
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
     
     if(error){
         NSLog(@"[error] %@", [error localizedDescription]);
     }else{
         // Starts advertising the service
         [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey : @"mokyu", CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:kServiceUUID]] }];
-        NSLog(@"start advertising");
+        NSString* value = @"start advertising";
+        NSLog(@"%@", value);
+        [self.delegate logDelegate:value];
     }
 }
 
@@ -221,8 +276,9 @@
 // Invoked when you start advertising the local peripheral device’s data.
 - (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(NSError *)error
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
     
     if(error){
         NSLog(@"[error] %@", [error localizedDescription]);
@@ -235,24 +291,27 @@
 // Invoked when a remote central device subscribes to a characteristic’s value.
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
 }
 
 // peripheralManager:central:didUnsubscribeFromCharacteristic:
 // Invoked when a remote central device unsubscribes from a characteristic’s value.
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didUnsubscribeFromCharacteristic:(CBCharacteristic *)characteristic
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
 }
 
 // peripheralManagerIsReadyToUpdateSubscribers:
 // Invoked when a local peripheral device is again ready to send characteristic value updates. (required)
 - (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
 }
 
 // Receiving Read and Write Requests
@@ -261,8 +320,9 @@
 // Invoked when a local peripheral device receives an Attribute Protocol (ATT) read request for a characteristic that has a dynamic value.
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveReadRequest:(CBATTRequest *)request
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
     
     CBCharacteristic* characteristic = request.characteristic;
     
@@ -283,8 +343,9 @@
 // Invoked when a local peripheral device receives an Attribute Protocol (ATT) write request for a characteristic that has a dynamic value.
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self.delegate logDelegate:NSStringFromSelector(_cmd)];
+    NSString* cmd = NSStringFromSelector(_cmd);
+    NSLog(@"%@", cmd);
+    [self.delegate logDelegate:cmd];
 }
 
 // peripheral:didModifyServices:

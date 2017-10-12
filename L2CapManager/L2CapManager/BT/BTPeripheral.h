@@ -9,21 +9,25 @@
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-
-#define CBUUIDL2CAPPSMCharacteristicString @"ABDD3056-28FA-441D-A470-55A75A52553A"
+@protocol BTPeripheralDelegate<NSObject>
+@optional
+- (void)logDelegate:(NSString *)message;
+@end
 
 @interface BTPeripheral : NSObject<CBPeripheralDelegate, NSStreamDelegate>
 {
     NSString *kCharacteristicUUID;
+
+    //NSOutputStream* outputStream;
+    NSInputStream* inputStream;
     NSString* CBUUIDL2CAppSMCharacteristicString;
     CBL2CAPPSM psm;
 }
 
 @property(nonatomic, strong)CBPeripheral* peripheral;
-@property(nonatomic, strong)CBService* service;
-@property(nonatomic, strong)NSInputStream* inputStream;
-//@property(nonatomic, strong)NSOutputStream* outputStream;
 @property(nonatomic, strong)CBL2CAPChannel* l2cap;
+
+@property (nonatomic, assign) id <BTPeripheralDelegate> delegate;
 
 - (id)init __attribute__((unavailable("init is not available")));
 - (id)initWithServicePeripheral:(CBPeripheral *)peripheral service:(CBService *)service;
